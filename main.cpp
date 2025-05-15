@@ -7,7 +7,6 @@ int main() {
     pack* arr = nullptr;
     int count = 0;
     int a;
-    }
     do {
         cout << "1. Отправить посылку\n";
         cout << "2. Добавить отделение\n";
