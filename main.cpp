@@ -29,6 +29,7 @@ int main() {
         cout << "4. Узнать информацию о отделении\n";
         cout << "5. Отследить посылку по трек номеру\n";
         cout << "6. Выдать посылку\n";
+        cout << "7.Пропуск времени \n";
         cout << "0. Выйти\n";
         cin >> a;
         switch (a) {
@@ -49,6 +50,9 @@ int main() {
                 break;
             case 6:
                 give(arr, count); // Функция выдачи посылки (должна быть определена)
+                break;
+            case 7: 
+                advanceTime(arr, count);
                 break;
             case 0:
                 cout << "Выход из программы." << endl;
