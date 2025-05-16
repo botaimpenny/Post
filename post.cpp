@@ -118,34 +118,57 @@ double PACK::post::distance(pack* arr, int count){
         }
 }
 
-void post::delpost() {
-	vector<string> lines;
-	string line;
-	ifstream file("posts.txt");
-	if ( !file.is_open()){
-		cout << "Ошибка: невозможно открыть файл" << endl;
-		return;
-	}
-	while (getline(file,line)){
-		lines.push_back(line);
-	}
-	file.close();
-	for (size_t i=0;i < lines.size(); i++){
-		cout << i+1 << ") " << lines[i] <<  endl;
-	}
-	cout << "Укажите номер отделения, которое хотите удалить: ";
-	size_t num;
-	cin >> num;
-	if (num < 1 || num > lines.size()){
-		cout << "Такого иднекса не существует" << endl;
-		return;
-	}
-	lines.erase(lines.begin() + num - 1);
-	ofstream out("posts.txt");
-	for (const auto& l : lines){
-		out << l << endl;
-	}
-	out.close();
-	cout << "Удаление отделения прошло успешно" << endl;
-	cout << "---------------------------------" << endl;
+void post::delpost(pack* arr, int count) {
+    vector<string> lines;
+    string line;
+
+    ifstream in("posts.txt");
+    while (getline(in, line)) {
+        lines.push_back(line);
+    }
+    in.close();
+
+    cout << "Список почтовых отделений:" << endl;
+    for (size_t i = 0; i < lines.size(); ++i) {
+        cout << i + 1 << ") " << lines[i] << endl;
+    }
+
+    cout << "Введите номер отделения для удаления: ";
+    size_t num;
+    cin >> num;
+
+    if (num > 0 && num <= lines.size()) {
+        istringstream iss(lines[num - 1]);
+        int index, x, y;
+        vector<int> packs;
+        iss >> index >> x >> y;
+        int trak;
+        while (iss >> trak) {
+            packs.push_back(trak);
+        }
+
+        for (int track : packs) {
+            for (int i = 0; i < count; i++) {
+                if (arr[i].id() == track) {
+                    arr[i].setTo(arr[i].from());
+                    cout << "Посылка с трек-номером " << track
+                        << " отправлена обратно в отделение " << arr[i].from() << endl;
+                }
+            }
+        }
+
+        lines.erase(lines.begin() + num - 1);
+
+        ofstream out("posts.txt");
+        for (const auto& l : lines) {
+            out << l << endl;
+        }
+        out.close();
+
+        save(arr, count);
+        cout << "Отделение успешно удалено. Все посылки отправлены обратно." << endl;
+    }
+    else {
+        cout << "Неверный номер отделения." << endl;
+    }
 }
